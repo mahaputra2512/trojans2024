@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>TROJANS 2023 | Under Maintenance</title>
+    <style>
+        @font-face {
+            font-family: 'Unifont';
+            src: url('Unifont.woff') format('woff');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .logo-img_big {
+            width: 60%;
+        }
+
+        .typewriter h1 {
+            color: white;
+            font-family: 'Unifont';
+            overflow: hidden;
+            border-right: .15em solid purple;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation:
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+
+        .mobile-logo{
+            display: none;
+        }
+
+        .mobile-logo>img{
+            width: 60vw;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: purple;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .logo-img_big {
+                display: none;
+            }
+
+            .mobile-logo {
+                display: block;
+            }
+
+            .typewriter>h1{
+                font-size: small;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="logo big.png" alt="" class="logo-img_big">
+        <center class="mobile-logo">
+            <img src="logo.png" alt="">
+            <img src="headline.png" alt="">
+        </center>
+        <div class="typewriter">
+            <h1>IS UNDER MAINTENANCE</h1>
+        </div>
+    </div>
+</body>
+
+</html>
