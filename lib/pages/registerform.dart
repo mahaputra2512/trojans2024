@@ -9,13 +9,17 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:group_radio_button/group_radio_button.dart';
 
 import '../utils.dart';
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key, required this.batch, required this.packageTitles, required this.packages})
+  const RegisterForm(
+      {Key? key,
+      required this.batch,
+      required this.packageTitles,
+      required this.packages})
       : super(key: key);
 
   final String batch;
@@ -32,13 +36,20 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterCTFState extends State<RegisterForm> {
-  _RegisterCTFState({required this.batch, required this.packageTitles, required this.packages});
+  _RegisterCTFState(
+      {required this.batch,
+      required this.packageTitles,
+      required this.packages});
   final _formKey = GlobalKey<FormState>();
 
-  PlatformFile? followProofFile; //bukti follow
+  bool? isChecked = false;
+
+  PlatformFile? followProofFile;
+  PlatformFile? repostProofFile; //bukti follow
   PlatformFile? transferProofFile;
   PlatformFile? commentProofFile;
-  String followProofId = ""; //bukti follow
+  String followProofId = "";
+  String repostProofId = ""; //bukti follow
   String transferProofId = "";
   String commentProofId = "";
 
@@ -62,24 +73,36 @@ class _RegisterCTFState extends State<RegisterForm> {
       'batch': batch,
       'followProofId': followProofId,
       'transferProofId': transferProofId,
-      'commentProofId': commentProofId //not yet get on server
+      'commentProofId': commentProofId,
+      'posterProofId': repostProofId //not yet get on server
     };
     var data = await http
-        .post(Uri.parse("https://korpstar-poltekssn.org:8444/api/register"), body: body)
+        .post(
+            Uri.parse(
+                "https://wreckit4-api.korpstar-poltekssn.org/api/register"),
+            body: body)
         .timeout(const Duration(seconds: 7), onTimeout: () {
       return http.Response({}.toString(), 408);
     });
     var response = json.decode(data.body);
+    print(data.statusCode);
+
     if (data.statusCode == 200) {
       setState(() {
         Utils(context).stopLoading();
         Navigator.of(context).pop();
-        showAlertDialog(context, MediaQuery.of(context).size.width / 100, false, "Registrasi Suskes!",
-            "Kamu telah berhasil mendaftar Trojans 2023. Silahkan cek e-mail untuk informasi lebih lanjut.", true);
+        showAlertDialog(
+            context,
+            MediaQuery.of(context).size.width / 100,
+            false,
+            "Registrasi Suskes!",
+            "Kamu telah berhasil mendaftar Trojans 2024. Silahkan cek e-mail untuk informasi lebih lanjut.",
+            true);
       });
     } else {
       setState(() {
         Utils(context).stopLoading();
+        Navigator.of(context).pop();
         showAlertDialog(
             context,
             MediaQuery.of(context).size.width / 100,
@@ -92,12 +115,18 @@ class _RegisterCTFState extends State<RegisterForm> {
   }
 
   Future getFollowFile(ImageSource media) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png']);
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['png']);
     if (result != null) {
       if (result.files.first.size > 2048000) {
         setState(() {
-          showAlertDialog(context, MediaQuery.of(context).size.width / 100, false, "Filenya kegedean!",
-              "Ukuran maksimal file registrasi CTF 2 MB ya", false);
+          showAlertDialog(
+              context,
+              MediaQuery.of(context).size.width / 100,
+              false,
+              "Filenya kegedean!",
+              "Ukuran maksimal file registrasi CTF 2 MB ya",
+              false);
         });
         return;
       }
@@ -108,13 +137,42 @@ class _RegisterCTFState extends State<RegisterForm> {
     }
   } //bukti follow
 
-  Future getTransferFile(ImageSource media) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png']);
+  Future getRepostFile(ImageSource media) async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['png']);
     if (result != null) {
       if (result.files.first.size > 2048000) {
         setState(() {
-          showAlertDialog(context, MediaQuery.of(context).size.width / 100, false, "Filenya kegedean!",
-              "Ukuran maksimal file registrasi CTF 2 MB ya", false);
+          showAlertDialog(
+              context,
+              MediaQuery.of(context).size.width / 100,
+              false,
+              "Filenya kegedean!",
+              "Ukuran maksimal file registrasi CTF 2 MB ya",
+              false);
+        });
+        return;
+      }
+      repostProofFile = result.files.first;
+      _uploadRepostFile(repostProofFile!.name, repostProofFile!.bytes);
+    } else {
+      // User canceled the picker
+    }
+  } //bukti follow
+
+  Future getTransferFile(ImageSource media) async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['png']);
+    if (result != null) {
+      if (result.files.first.size > 2048000) {
+        setState(() {
+          showAlertDialog(
+              context,
+              MediaQuery.of(context).size.width / 100,
+              false,
+              "Filenya kegedean!",
+              "Ukuran maksimal file registrasi CTF 2 MB ya",
+              false);
         });
         return;
       }
@@ -126,12 +184,18 @@ class _RegisterCTFState extends State<RegisterForm> {
   }
 
   Future getCommentFile(ImageSource media) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png']);
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['png']);
     if (result != null) {
       if (result.files.first.size > 2048000) {
         setState(() {
-          showAlertDialog(context, MediaQuery.of(context).size.width / 100, false, "Filenya kegedean!",
-              "Ukuran maksimal file registrasi CTF 2 MB ya", false);
+          showAlertDialog(
+              context,
+              MediaQuery.of(context).size.width / 100,
+              false,
+              "Filenya kegedean!",
+              "Ukuran maksimal file registrasi CTF 2 MB ya",
+              false);
         });
         return;
       }
@@ -144,9 +208,11 @@ class _RegisterCTFState extends State<RegisterForm> {
 
   Future _uploadFollowFile(filename, fileByte) async {
     Utils(context).startLoading();
-    var request = http.MultipartRequest("POST", Uri.parse("https://korpstar-poltekssn.org:8444/api/files"));
+    var request = http.MultipartRequest("POST",
+        Uri.parse("https://wreckit4-api.korpstar-poltekssn.org/api/files"));
     request.files.add(http.MultipartFile.fromBytes('file', fileByte,
-        filename: path.basename(filename), contentType: MediaType('image', 'png')));
+        filename: path.basename(filename),
+        contentType: MediaType('image', 'png')));
 
     var response = await request.send().timeout(const Duration(seconds: 15));
     if (response.statusCode == 200) {
@@ -159,11 +225,32 @@ class _RegisterCTFState extends State<RegisterForm> {
     });
   }
 
+  Future _uploadRepostFile(filename, fileByte) async {
+    Utils(context).startLoading();
+    var request = http.MultipartRequest("POST",
+        Uri.parse("https://wreckit4-api.korpstar-poltekssn.org/api/files"));
+    request.files.add(http.MultipartFile.fromBytes('file', fileByte,
+        filename: path.basename(filename),
+        contentType: MediaType('image', 'png')));
+
+    var response = await request.send().timeout(const Duration(seconds: 15));
+    if (response.statusCode == 200) {
+      dynamic result = await response.stream.bytesToString();
+      result = json.decode(result);
+      repostProofId = result['fileId'];
+    }
+    setState(() {
+      Utils(context).stopLoading();
+    });
+  }
+
   Future _uploadTransferFile(filename, fileByte) async {
     Utils(context).startLoading();
-    var request = http.MultipartRequest("POST", Uri.parse("https://korpstar-poltekssn.org:8444/api/files"));
+    var request = http.MultipartRequest("POST",
+        Uri.parse("https://wreckit4-api.korpstar-poltekssn.org/api/files"));
     request.files.add(http.MultipartFile.fromBytes('file', fileByte,
-        filename: path.basename(filename), contentType: MediaType('image', 'png')));
+        filename: path.basename(filename),
+        contentType: MediaType('image', 'png')));
 
     var response = await request.send().timeout(const Duration(seconds: 15));
     if (response.statusCode == 200) {
@@ -178,9 +265,11 @@ class _RegisterCTFState extends State<RegisterForm> {
 
   Future _uploadCommentFile(filename, fileByte) async {
     Utils(context).startLoading();
-    var request = http.MultipartRequest("POST", Uri.parse("https://korpstar-poltekssn.org:8444/api/files"));
+    var request = http.MultipartRequest("POST",
+        Uri.parse("https://wreckit4-api.korpstar-poltekssn.org/api/files"));
     request.files.add(http.MultipartFile.fromBytes('file', fileByte,
-        filename: path.basename(filename), contentType: MediaType('image', 'png')));
+        filename: path.basename(filename),
+        contentType: MediaType('image', 'png')));
 
     var response = await request.send().timeout(const Duration(seconds: 15));
     if (response.statusCode == 200) {
@@ -219,7 +308,9 @@ class _RegisterCTFState extends State<RegisterForm> {
           children: [
             Text("${toBeginningOfSentenceCase(batch)} Registration",
                 style: TextStyle(
-                    fontFamily: "Unifont", fontSize: scrw * (smallVer ? 6 : 4.5), color: Colors.purpleAccent.shade700)),
+                    fontFamily: "Unifont",
+                    fontSize: scrw * (smallVer ? 6 : 4.5),
+                    color: Colors.blueAccent.shade700)),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -241,13 +332,14 @@ class _RegisterCTFState extends State<RegisterForm> {
                   height: (smallVer) ? scrh * 75 : scrh * 50,
                   decoration: BoxDecoration(
                       color: Colors.black,
-                      border: Border.all(width: 3, color: Colors.purple),
+                      border: Border.all(width: 3, color: Colors.blue),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.purple.shade900,
+                          color: Colors.blue.shade900,
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: const Offset(5, 5), // changes position of shadow
+                          offset:
+                              const Offset(5, 5), // changes position of shadow
                         ),
                       ]),
                   child: SingleChildScrollView(
@@ -260,7 +352,8 @@ class _RegisterCTFState extends State<RegisterForm> {
                         ),
                         const Text(
                           "Isi form dibawah ini dengan benar",
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w900),
                           textAlign: TextAlign.center,
                         ),
                         Form(
@@ -273,10 +366,14 @@ class _RegisterCTFState extends State<RegisterForm> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
                                     controller: nameController,
-                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                    style: const TextStyle(
+                                        fontFamily: 'Unifont',
+                                        color: Colors.white),
                                     decoration: const InputDecoration(
                                       labelText: "Nama",
-                                      labelStyle: TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                      labelStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.white),
                                       fillColor: Colors.white,
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -289,7 +386,9 @@ class _RegisterCTFState extends State<RegisterForm> {
                                           width: 2.0,
                                         ),
                                       ),
-                                      errorStyle: TextStyle(fontFamily: 'Unifont', color: Colors.purple),
+                                      errorStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.blue),
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -304,10 +403,14 @@ class _RegisterCTFState extends State<RegisterForm> {
                                   child: TextFormField(
                                     keyboardType: TextInputType.emailAddress,
                                     controller: emailTextController,
-                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                    style: const TextStyle(
+                                        fontFamily: 'Unifont',
+                                        color: Colors.white),
                                     decoration: const InputDecoration(
                                       labelText: "Email",
-                                      labelStyle: TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                      labelStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.white),
                                       fillColor: Colors.white,
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -320,7 +423,9 @@ class _RegisterCTFState extends State<RegisterForm> {
                                           width: 2.0,
                                         ),
                                       ),
-                                      errorStyle: TextStyle(fontFamily: 'Unifont', color: Colors.purple),
+                                      errorStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.blue),
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -335,10 +440,14 @@ class _RegisterCTFState extends State<RegisterForm> {
                                   child: TextFormField(
                                     controller: phoneNumberTextController,
                                     keyboardType: TextInputType.phone,
-                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                    style: const TextStyle(
+                                        fontFamily: 'Unifont',
+                                        color: Colors.white),
                                     decoration: const InputDecoration(
                                       labelText: "Nomor Telegram",
-                                      labelStyle: TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                      labelStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.white),
                                       fillColor: Colors.white,
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -351,7 +460,9 @@ class _RegisterCTFState extends State<RegisterForm> {
                                           width: 2.0,
                                         ),
                                       ),
-                                      errorStyle: TextStyle(fontFamily: 'Unifont', color: Colors.purple),
+                                      errorStyle: TextStyle(
+                                          fontFamily: 'Unifont',
+                                          color: Colors.blue),
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -367,18 +478,21 @@ class _RegisterCTFState extends State<RegisterForm> {
                                     Text("Choose your package: ",
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
-                                            fontSize: scrw * (smallVer ? 4 : 1.1),
+                                            fontSize:
+                                                scrw * (smallVer ? 4 : 1.1),
                                             letterSpacing: 2.0,
                                             fontFamily: 'Unifont')),
                                   ],
                                 ),
                                 Theme(
-                                  data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
+                                  data: Theme.of(context).copyWith(
+                                      unselectedWidgetColor: Colors.white),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: RadioGroup<String>.builder(
                                       direction: Axis.horizontal,
-                                      horizontalAlignment: MainAxisAlignment.start,
+                                      horizontalAlignment:
+                                          MainAxisAlignment.start,
                                       groupValue: _packageValue,
                                       onChanged: (value) => setState(() {
                                         _packageValue = value!;
@@ -393,8 +507,9 @@ class _RegisterCTFState extends State<RegisterForm> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: HoverAnimatedContainer(
-                                    decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.white), color: Colors.black),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                        color: Colors.black),
                                     child: Padding(
                                       padding: const EdgeInsets.all(20.0),
                                       child: Column(
@@ -402,14 +517,22 @@ class _RegisterCTFState extends State<RegisterForm> {
                                           Text(packages[_packageValue]['desc'],
                                               textAlign: TextAlign.justify,
                                               style: const TextStyle(
-                                                  color: Colors.white, letterSpacing: 1, fontFamily: 'Unifont')),
+                                                  color: Colors.white,
+                                                  letterSpacing: 1,
+                                                  fontFamily: 'Unifont')),
                                           SizedBox(
                                             height: scrh * 2,
                                           ),
                                           Text(
-                                              NumberFormat.currency(locale: 'in_ID', symbol: 'Rp. ', decimalDigits: 0)
-                                                  .format(packages[_packageValue]['price']),
-                                              style: const TextStyle(fontSize: 20))
+                                              NumberFormat.currency(
+                                                      locale: 'in_ID',
+                                                      symbol: 'Rp. ',
+                                                      decimalDigits: 0)
+                                                  .format(
+                                                      packages[_packageValue]
+                                                          ['price']),
+                                              style:
+                                                  const TextStyle(fontSize: 20))
                                         ],
                                       ),
                                     ),
@@ -417,27 +540,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                 ),
                                 SizedBox(height: scrh * 2),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   child: smallVer
                                       ? Column(
                                           children: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getFollowFile(ImageSource.gallery);
+                                                getFollowFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -445,23 +579,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(height: scrh),
                                             followProofFile != null
                                                 ? Text(followProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti follow instagram ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti follow instagram ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
@@ -471,20 +620,30 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getFollowFile(ImageSource.gallery);
+                                                getFollowFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -492,23 +651,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(width: scrw),
                                             followProofFile != null
                                                 ? Text(followProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti follow instagram ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti follow instagram ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
@@ -516,27 +690,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                 ),
                                 SizedBox(height: scrh * 2),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   child: smallVer
                                       ? Column(
                                           children: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getCommentFile(ImageSource.gallery);
+                                                getCommentFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -544,23 +729,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(height: scrh),
                                             commentProofFile != null
                                                 ? Text(commentProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti comment dan tag teman kamu ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti comment dan tag teman kamu ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
@@ -570,20 +770,30 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getCommentFile(ImageSource.gallery);
+                                                getCommentFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -591,52 +801,77 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(width: scrw),
                                             commentProofFile != null
                                                 ? Text(commentProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti comment dan tag teman kamu ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti comment dan tag teman kamu ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
                                         ),
                                 ),
-
                                 SizedBox(height: scrh * 2),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   child: smallVer
                                       ? Column(
                                           children: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getTransferFile(ImageSource.gallery);
+                                                getTransferFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -644,23 +879,38 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(height: scrh),
                                             transferProofFile != null
                                                 ? Text(transferProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti pembayaran ke rekening sesuai ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti pembayaran ke rekening sesuai \n ( Dana 082146942219 An Gede Gangga Widiagung) \n (0239334668 BNI AN Gede Gangga Widiagung) ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
@@ -670,20 +920,30 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 onPrimary: Colors.white,
-                                                primary: Colors.purple[900],
+                                                primary: Colors.blue[900],
                                                 onSurface: Colors.grey,
-                                                side: const BorderSide(color: Colors.transparent, width: 1),
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
                                                 elevation: 20,
-                                                minimumSize: smallVer ? Size(scrw * 30, scrh * 3) : const Size(100, 25),
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
                                               ),
                                               onPressed: () {
-                                                getTransferFile(ImageSource.gallery);
+                                                getTransferFile(
+                                                    ImageSource.gallery);
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(smallVer ? scrw * 0.25 : 8.0),
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
                                                 child: Text("UPLOAD",
                                                     style: TextStyle(
-                                                        fontSize: scrw * (smallVer ? 3 : 0.7),
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
                                                         letterSpacing: 1.0,
                                                         fontFamily: 'Unifont')),
                                               ),
@@ -691,64 +951,272 @@ class _RegisterCTFState extends State<RegisterForm> {
                                             SizedBox(width: scrw),
                                             transferProofFile != null
                                                 ? Text(transferProofFile!.name,
-                                                    style: const TextStyle(fontFamily: 'Unifont', color: Colors.white),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
                                                     textAlign: TextAlign.center)
-                                                : Wrap(
+                                                : const Wrap(
                                                     children: [
-                                                      const Text("Unggah bukti pembayaran ke rekening sesuai ",
-                                                          style: TextStyle(fontFamily: 'Unifont', color: Colors.white),
-                                                          textAlign: TextAlign.center),
-                                                      InkWell(
-                                                        child: const Text('panduan terlampir',
-                                                            style: TextStyle(
-                                                                fontFamily: 'Unifont',
-                                                                color: Colors.white,
-                                                                decoration: TextDecoration.underline),
-                                                            textAlign: TextAlign.center),
-                                                        onTap: () =>
-                                                            launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                                                      ),
+                                                      Text(
+                                                          "Unggah bukti pembayaran ke rekening sesuai ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
                                                     ],
                                                   )
                                           ],
                                         ),
                                 ),
-
+                                SizedBox(height: scrh * 2),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: smallVer
+                                      ? Column(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                onPrimary: Colors.white,
+                                                primary: Colors.blue[900],
+                                                onSurface: Colors.grey,
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
+                                                elevation: 20,
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
+                                              ),
+                                              onPressed: () {
+                                                getRepostFile(
+                                                    ImageSource.gallery);
+                                              },
+                                              child: Padding(
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
+                                                child: Text("UPLOAD",
+                                                    style: TextStyle(
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
+                                                        letterSpacing: 1.0,
+                                                        fontFamily: 'Unifont')),
+                                              ),
+                                            ),
+                                            SizedBox(height: scrh),
+                                            repostProofFile != null
+                                                ? Text(repostProofFile!.name,
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
+                                                    textAlign: TextAlign.center)
+                                                : const Wrap(
+                                                    children: [
+                                                      Text(
+                                                          "Unggah bukti repost poster ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
+                                                    ],
+                                                  )
+                                          ],
+                                        )
+                                      : Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                onPrimary: Colors.white,
+                                                primary: Colors.blue[900],
+                                                onSurface: Colors.grey,
+                                                side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1),
+                                                elevation: 20,
+                                                minimumSize: smallVer
+                                                    ? Size(scrw * 30, scrh * 3)
+                                                    : const Size(100, 25),
+                                              ),
+                                              onPressed: () {
+                                                getRepostFile(
+                                                    ImageSource.gallery);
+                                              },
+                                              child: Padding(
+                                                padding: EdgeInsets.all(smallVer
+                                                    ? scrw * 0.25
+                                                    : 8.0),
+                                                child: Text("UPLOAD",
+                                                    style: TextStyle(
+                                                        fontSize: scrw *
+                                                            (smallVer
+                                                                ? 3
+                                                                : 0.7),
+                                                        letterSpacing: 1.0,
+                                                        fontFamily: 'Unifont')),
+                                              ),
+                                            ),
+                                            SizedBox(width: scrw),
+                                            repostProofFile != null
+                                                ? Text(repostProofFile!.name,
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Unifont',
+                                                        color: Colors.white),
+                                                    textAlign: TextAlign.center)
+                                                : const Wrap(
+                                                    children: [
+                                                      Text(
+                                                          "Unggah bukti repost poster instagram ",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Unifont',
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center),
+                                                      // InkWell(
+                                                      //   child: const Text(
+                                                      //       'panduan terlampir',
+                                                      //       style: TextStyle(
+                                                      //           fontFamily:
+                                                      //               'Unifont',
+                                                      //           color: Colors
+                                                      //               .white,
+                                                      //           decoration:
+                                                      //               TextDecoration
+                                                      //                   .underline),
+                                                      //       textAlign: TextAlign
+                                                      //           .center),
+                                                      //   onTap: () => launchUrl(
+                                                      //       Uri.parse(
+                                                      //           'https://trojans.id/GuideBook')),
+                                                      // ),
+                                                    ],
+                                                  )
+                                          ],
+                                        ),
+                                ),
+                                SizedBox(height: scrh * 2),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isChecked = value;
+                                        });
+                                      },
+                                    ),
+                                    const Text(
+                                        "Saya sudah mengisi data sebenar-benarnya sesuai ketentuan")
+                                  ],
+                                ),
                                 SizedBox(height: scrh * 3),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     onPrimary: Colors.white,
-                                    primary: Colors.deepPurple,
+                                    primary: Colors.blue.shade800,
                                     onSurface: Colors.grey,
-                                    side: const BorderSide(color: Colors.transparent, width: 1),
+                                    side: const BorderSide(
+                                        color: Colors.transparent, width: 1),
                                     elevation: 20,
-                                    minimumSize: smallVer ? Size(scrw * 60, scrh * 7) : const Size(150, 50),
+                                    minimumSize: smallVer
+                                        ? Size(scrw * 60, scrh * 7)
+                                        : const Size(150, 50),
                                     shape: BeveledRectangleBorder(
-                                        side: const BorderSide(color: Colors.deepPurple, width: 2),
-                                        borderRadius: BorderRadius.circular(15)),
+                                        side: BorderSide(
+                                            color: Colors.blue.shade800,
+                                            width: 2),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                   ),
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       if (followProofFile == null) {
-                                        showAlertDialog(context, scrw, smallVer, "Bukti follownya belum!",
-                                            "Upload bukti follow story terlebih dahulu!", false);
+                                        showAlertDialog(
+                                            context,
+                                            scrw,
+                                            smallVer,
+                                            "Bukti follownya belum!",
+                                            "Upload bukti follow story terlebih dahulu!",
+                                            false);
                                         return;
                                       }
                                       if (transferProofFile == null) {
-                                        showAlertDialog(context, scrw, smallVer, "Bukti transfernya belum!",
-                                            "Upload bukti pembayaran terlebih dahulu!", false);
+                                        showAlertDialog(
+                                            context,
+                                            scrw,
+                                            smallVer,
+                                            "Bukti transfernya belum!",
+                                            "Upload bukti pembayaran terlebih dahulu!",
+                                            false);
+                                        return;
+                                      }
+                                      if (isChecked == false) {
+                                        showAlertDialog(
+                                            context,
+                                            scrw,
+                                            smallVer,
+                                            "Anda Belum Mencentang pengisian data",
+                                            "Centang terlebih dahulu!",
+                                            false);
                                         return;
                                       }
                                       _postRegisCTF();
                                     }
                                   },
                                   child: Padding(
-                                    padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
-                                    child: Text("SUBMIT",
-                                        style: TextStyle(
-                                            fontSize: scrw * (smallVer ? 4 : 1.1),
-                                            letterSpacing: 2.0,
-                                            fontFamily: 'Unifont')),
+                                    padding: EdgeInsets.all(
+                                        smallVer ? scrw * 0.5 : 16.0),
+                                    child: Text(
+                                      "SUBMIT",
+                                      style: TextStyle(
+                                          fontSize: scrw * (smallVer ? 4 : 1.1),
+                                          letterSpacing: 2.0,
+                                          fontFamily: 'Unifont'),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -778,7 +1246,7 @@ class _RegisterCTFState extends State<RegisterForm> {
 //               fontSize: scrw * 1.5,
 //               letterSpacing: 0.5,
 //               fontFamily: 'Unifont',
-//               color: Colors.purple)),
+//               color: Colors.blue)),
 //     ),
 //     onPressed: () {
 //       Navigator.of(context).pop();
@@ -788,7 +1256,7 @@ class _RegisterCTFState extends State<RegisterForm> {
 //   AlertDialog alert = AlertDialog(
 //     title: Text("CTF's Agreements",
 //         style: TextStyle(
-//             fontSize: scrw * (smallVer ? 5 : 2), letterSpacing: 0.1, fontFamily: 'Unifont', color: Colors.purple)),
+//             fontSize: scrw * (smallVer ? 5 : 2), letterSpacing: 0.1, fontFamily: 'Unifont', color: Colors.blue)),
 //     content: Text("""1. Peserta mengisi data dengan sesuai dan benar pada tahap registrasi WRECK-IT 3.0.
 // 2. Peserta adalah Warga Negara Indonesia dan dapat dibuktikan kewarganegaraannya dengan hasil pindai kartu identitas (KTP/KTM/SIM).
 // 3. Peserta melengkapi berkas pendaftaran dengan data yang benar dan legal secara hukum.
@@ -809,7 +1277,7 @@ class _RegisterCTFState extends State<RegisterForm> {
 // 13. Keputusan yang ditetapkan bersifat mutlak dan tidak dapat diganggu gugat.
 // 14. Panitia berhak mencabut gelar juara dan mengambil kembali hadiah yang telah diberikan apabila terbukti tim yang bersangkutan melakukan kecurangan atau pelanggaran lain ketika kompetisi berlangsung.""",
 //         style: TextStyle(
-//             fontSize: scrw * (smallVer ? 4 : 1), letterSpacing: 0.5, fontFamily: 'Unifont', color: Colors.purple)),
+//             fontSize: scrw * (smallVer ? 4 : 1), letterSpacing: 0.5, fontFamily: 'Unifont', color: Colors.blue)),
 //     actions: [
 //       okButton,
 //     ],
@@ -824,7 +1292,8 @@ class _RegisterCTFState extends State<RegisterForm> {
 //   );
 // }
 
-showAlertDialog(BuildContext context, double scrw, bool smallVer, String title, String content, bool suksesGa) {
+showAlertDialog(BuildContext context, double scrw, bool smallVer, String title,
+    String content, bool suksesGa) {
   Widget okButton = TextButton(
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -834,10 +1303,9 @@ showAlertDialog(BuildContext context, double scrw, bool smallVer, String title, 
               fontSize: scrw * 1.5,
               letterSpacing: 0.5,
               fontFamily: 'Unifont',
-              color: Colors.purple)),
+              color: Colors.blue)),
     ),
     onPressed: () {
-      Navigator.of(context).pop();
       suksesGa ? Navigator.of(context).pop() : null;
     },
   );
@@ -845,10 +1313,16 @@ showAlertDialog(BuildContext context, double scrw, bool smallVer, String title, 
   AlertDialog alert = AlertDialog(
     title: Text(title,
         style: TextStyle(
-            fontSize: scrw * (smallVer ? 5 : 2), letterSpacing: 0.1, fontFamily: 'Unifont', color: Colors.purple)),
+            fontSize: scrw * (smallVer ? 5 : 2),
+            letterSpacing: 0.1,
+            fontFamily: 'Unifont',
+            color: Colors.blue)),
     content: Text(content,
         style: TextStyle(
-            fontSize: scrw * (smallVer ? 4 : 1.5), letterSpacing: 0.5, fontFamily: 'Unifont', color: Colors.purple)),
+            fontSize: scrw * (smallVer ? 4 : 1.5),
+            letterSpacing: 0.5,
+            fontFamily: 'Unifont',
+            color: Colors.blue)),
     actions: [
       okButton,
     ],

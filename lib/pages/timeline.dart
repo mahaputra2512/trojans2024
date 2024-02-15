@@ -12,15 +12,34 @@ class TimelinePage extends StatefulWidget {
 
 class _TimelinePageState extends State<TimelinePage> {
   List<dynamic> timelineEvents = [
-    {"date": DateTime.parse("2022-11-13"), "event": "Open Registration Early Bird"},
-    {"date": DateTime.parse("2022-11-28"), "event": "Close Registration Early Bird"},
-    {"date": DateTime.parse("2022-12-04"), "event": "Open Registration Reguler"},
-    {"date": DateTime.parse("2023-01-05"), "event": "Close Registration Reguler"},
-    {"date": DateTime.parse("2023-01-06"), "event": "Open Registration Last Chance"},
-    {"date": DateTime.parse("2023-02-04"), "event": "Close Registration Last Chance"},
-    {"date": DateTime.parse("2023-01-14"), "event": "Tryout Luring"},
-    {"date": DateTime.parse("2023-02-04"), "event": "Tryout Daring"},
-    {"date": DateTime.parse("2023-02-11"), "event": "Webinar Career Talk"},
+    {
+      "date": DateTime.parse("2024-01-17"),
+      "event": "Open Registration Early Bird"
+    },
+    {
+      "date": DateTime.parse("2024-01-26"),
+      "event": "Close Registration Early Bird"
+    },
+    {
+      "date": DateTime.parse("2024-01-29"),
+      "event": "Open Registration Reguler"
+    },
+    {
+      "date": DateTime.parse("2024-02-23"),
+      "event": "Close Registration Reguler"
+    },
+    {
+      "date": DateTime.parse("2024-02-24"),
+      "event": "Webinar",
+    },
+    {
+      "date": DateTime.parse("2024-03-02"),
+      "event": "Tryout Luring dan Seminar"
+    },
+    {
+      "date": DateTime.parse("2024-03-16"),
+      "event": "Tryout Daring",
+    },
   ];
 
   String happeningNowString = "ON GOING NOW";
@@ -56,7 +75,8 @@ class _TimelinePageState extends State<TimelinePage> {
     for (int i = 0; i < timelineEvents.length; i++) {
       if (timelineEvents[i]['date'].isAfter(now)) {
         eventIndex = i;
-        timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _setTime());
+        timer =
+            Timer.periodic(const Duration(seconds: 1), (Timer t) => _setTime());
         return;
       }
       if (timelineEvents[i]['date'].compareTo(now) == 0) {
@@ -103,7 +123,7 @@ class _TimelinePageState extends State<TimelinePage> {
                   style: TextStyle(
                       fontFamily: "Unifont",
                       fontSize: scrw * (smallVer ? 6 : 4.5),
-                      color: Colors.purpleAccent.shade700)),
+                      color: Colors.blueAccent.shade700)),
             ),
           Container(
               width: scrw * (smallVer ? 90 : 30),
@@ -115,19 +135,22 @@ class _TimelinePageState extends State<TimelinePage> {
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
                 child: FixedTimeline.tileBuilder(
-                  theme: TimelineThemeData(color: Colors.purple),
+                  theme: TimelineThemeData(color: Colors.blue),
                   builder: TimelineTileBuilder.connectedFromStyle(
                     contentsAlign: ContentsAlign.alternating,
                     contentsBuilder: (context, index) => Container(
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 7, 25, 229),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(30)),
                       margin: const EdgeInsets.all(8),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.black,
-                          primary: Colors.black,
-                          onSurface: Colors.black,
-                          side: const BorderSide(color: Colors.purple, width: 1),
+                          backgroundColor: Colors.blue,
+                          side: const BorderSide(color: Colors.blue, width: 1),
                           shape: BeveledRectangleBorder(
-                              side: const BorderSide(color: Colors.black, width: 2),
+                              side: const BorderSide(
+                                  color: Colors.black, width: 2),
                               borderRadius: BorderRadius.circular(15)),
                         ),
                         onPressed: null,
@@ -137,12 +160,18 @@ class _TimelinePageState extends State<TimelinePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DefaultTextStyle(
-                              style: const TextStyle(fontFamily: 'Unifont', fontSize: 14, color: Colors.white),
+                              style: const TextStyle(
+                                  fontFamily: 'Unifont',
+                                  fontSize: 14,
+                                  color: Colors.white),
                               child: Column(
                                 children: [
-                                  Text(DateFormat("d MMM y").format(timelineEvents[index]["date"])),
+                                  Text(DateFormat("d MMM y")
+                                      .format(timelineEvents[index]["date"])),
                                   const SizedBox(height: 2),
-                                  Text(timelineEvents[index]["event"].toString(), textAlign: TextAlign.center)
+                                  Text(
+                                      timelineEvents[index]["event"].toString(),
+                                      textAlign: TextAlign.center)
                                 ],
                               ),
                             ),
@@ -150,8 +179,10 @@ class _TimelinePageState extends State<TimelinePage> {
                         ),
                       ),
                     ),
-                    indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
-                    connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
+                    indicatorStyleBuilder: (context, index) =>
+                        IndicatorStyle.dot,
+                    connectorStyleBuilder: (context, index) =>
+                        ConnectorStyle.solidLine,
                     itemCount: timelineEvents.length,
                   ),
                 ),
@@ -175,48 +206,64 @@ class _TimelinePageState extends State<TimelinePage> {
                           style: TextStyle(
                               fontFamily: "Unifont",
                               fontSize: scrw * (smallVer ? 10 : 3.5),
-                              color: Colors.purpleAccent.shade700)),
+                              color: Colors.blueAccent.shade700)),
                       SizedBox(width: scrw * 0.5),
-                      Text('D', style: TextStyle(fontFamily: "Unifont", fontSize: scrw * (smallVer ? 6 : 2))),
+                      Text('D',
+                          style: TextStyle(
+                              fontFamily: "Unifont",
+                              fontSize: scrw * (smallVer ? 6 : 2))),
                       SizedBox(width: scrw * 1.5),
                       Text(countdownTimeHoursString,
                           style: TextStyle(
                               fontFamily: "Unifont",
                               fontSize: scrw * (smallVer ? 10 : 3.5),
-                              color: Colors.purpleAccent.shade700)),
+                              color: Colors.blueAccent.shade700)),
                       SizedBox(width: scrw * 0.5),
-                      Text('H', style: TextStyle(fontFamily: "Unifont", fontSize: scrw * (smallVer ? 6 : 2))),
+                      Text('H',
+                          style: TextStyle(
+                              fontFamily: "Unifont",
+                              fontSize: scrw * (smallVer ? 6 : 2))),
                       SizedBox(width: scrw * 1.5),
                       Text(countdownTimeMinutesString,
                           style: TextStyle(
                               fontFamily: "Unifont",
                               fontSize: scrw * (smallVer ? 10 : 3.5),
-                              color: Colors.purpleAccent.shade700)),
+                              color: Colors.blueAccent.shade700)),
                       SizedBox(width: scrw * 0.5),
-                      Text('M', style: TextStyle(fontFamily: "Unifont", fontSize: scrw * (smallVer ? 6 : 2))),
+                      Text('M',
+                          style: TextStyle(
+                              fontFamily: "Unifont",
+                              fontSize: scrw * (smallVer ? 6 : 2))),
                       SizedBox(width: scrw * 1.5),
                       Text(countdownTimeSecondsString,
                           style: TextStyle(
                               fontFamily: "Unifont",
                               fontSize: scrw * (smallVer ? 10 : 3.5),
-                              color: Colors.purpleAccent.shade700)),
+                              color: Colors.blueAccent.shade700)),
                       SizedBox(width: scrw * 0.5),
-                      Text('S', style: TextStyle(fontFamily: "Unifont", fontSize: scrw * (smallVer ? 6 : 2))),
+                      Text('S',
+                          style: TextStyle(
+                              fontFamily: "Unifont",
+                              fontSize: scrw * (smallVer ? 6 : 2))),
                     ],
                   ),
                 if (!isGoingOn) SizedBox(height: scrh * 2),
                 if (!isGoingOn)
                   Text('to ',
-                      style: TextStyle(fontFamily: "Unifont", fontSize: scrw * (smallVer ? 7 : 2.3), letterSpacing: 0)),
+                      style: TextStyle(
+                          fontFamily: "Unifont",
+                          fontSize: scrw * (smallVer ? 7 : 2.3),
+                          letterSpacing: 0)),
                 if (isGoingOn)
                   Text(happeningNowString,
                       style: TextStyle(
                           fontFamily: "Unifont",
                           fontSize: scrw * (smallVer ? 10 : 3.5),
-                          color: Colors.purpleAccent.shade700)),
+                          color: Colors.blueAccent.shade700)),
                 SizedBox(height: scrh * 2),
                 Text(countdownEventString,
-                    textAlign: TextAlign.center, style: const TextStyle(fontFamily: "Unifont", fontSize: 30))
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontFamily: "Unifont", fontSize: 30))
               ],
             ),
           )

@@ -11,61 +11,61 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   dynamic registrationData = [
     {
-      "from": DateTime.parse("2022-11-13"),
+      "from": DateTime.parse("2024-01-17"),
       "to": DateTime.parse(
-          "2022-11-29"), //add 1 to real date for comparation issue
+          "2024-01-24"), //add 1 to real date for comparation issue
       "batch": "early bird",
       "packageTitles": ["luring", "daring", "luxury"],
       "packages": {
         "luring": {
           "desc":
-              "1x TryOut Luring dan Pembahasan\n2x kali paket latihan SPTB Poltek SSN 2023\nKiat Sukses SPTB Poltek SSN 2023\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand\nVoucher 50% Bug Bounty Course Sekolah Siber\nFree Snack ",
-          "price": 50000
+              "1x TryOut Luring dan Pembahasan\n2x kali paket latihan SPTB Poltek SSN 2024\nKiat Sukses SPTB Poltek SSN 2024\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand\nVoucher 50% Bug Bounty Course Sekolah Siber\nFree Snack ",
+          "price": 60000
         },
         "daring": {
           "desc":
-              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2023\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nVoucher 50% Bug Bounty Course Sekolah Siber",
-          "price": 40000
+              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2024\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nVoucher 50% Bug Bounty Course Sekolah Siber",
+          "price": 50000
         },
         "luxury": {
           "desc":
-              "1x TryOut Luring dan Pembahasan\n1x TryOut Daring dan Pembahasan\n5x Paket Latihan SPTB Poltek SSN 2023\nKiat Sukses SPTB Poltek SSN 2023\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand\nVoucher 50% Bug Bounty Course Sekolah Siber\nFree Snack",
-          "price": 75000
+              "1x TryOut Luringdan Pembahasan\n1x TryOut Daring dan Pembahasan\n5x Paket Latihan SPTB Poltek SSN 2024\nKiat Sukses SPTB Poltek SSN 2024\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand\nVoucher 50% Bug Bounty Course Sekolah Siber\nFree Snack",
+          "price": 80000
         }
       }
     },
     {
-      "from": DateTime.parse("2022-12-04"),
-      "to": DateTime.parse("2023-01-05"),
+      "from": DateTime.parse("2024-02-01"),
+      "to": DateTime.parse("2024-02-23"),
       "batch": "reguler",
       "packageTitles": ["luring", "daring", "luxury"],
       "packages": {
         "luring": {
           "desc":
-              "1x TryOut Luring dan Pembahasan\n2x kali paket latihan SPTB Poltek SSN 2023\nKiat Sukses SPTB Poltek SSN 2023\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand",
+              "1x TryOut Luring dan Pembahasan\n2x kali paket latihan SPTB Poltek SSN 2024\nKiat Sukses SPTB Poltek SSN 2024\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand",
           "price": 60000
         },
         "daring": {
           "desc":
-              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2023\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor",
+              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2024\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor",
           "price": 50000
         },
         "luxury": {
           "desc":
-              "1x TryOut Luring dan Pembahasan\n1x TryOut Daring dan Pembahasan\n5x Paket Latihan SPTB Poltek SSN 2023\nKiat Sukses SPTB Poltek SSN 2023\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand",
-          "price": 85000
+              "1x TryOut Luring dan Pembahasan\n1x TryOut Daring dan Pembahasan\n5x Paket Latihan SPTB Poltek SSN 2024\nKiat Sukses SPTB Poltek SSN 2024\nLive Hacking\nCampus Tour\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor\nCyber and Crypto Stand",
+          "price": 80000
         }
       }
     },
     {
-      "from": DateTime.parse("2023-01-05"),
-      "to": DateTime.parse("2023-02-04"),
+      "from": DateTime.parse("2024-01-29"),
+      "to": DateTime.parse("2024-02-23"),
       "batch": "last chance",
       "packageTitles": ["daring"],
       "packages": {
         "daring": {
           "desc":
-              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2023\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor",
+              "1x TryOut Daring dan Pembahasan\n3x Paket Latihan SPTB Poltek SSN 2024\nCareer Talk oleh alumni STSN dan Poltek SSN\nExclusive Group Discussion SPTB with Mentor",
           "price": 60000
         }
       }
@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late DateTime now;
 
-  int dataIndex = -1;
+  int dataIndex = 0;
   Future _setCountdown() async {
     // now = DateTime.parse('2023-01-06');
     now = DateTime.now();
@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ? Column(
                 children: [
                   Image.asset(
-                    "images/logo.png",
+                    "images/logo2024.png",
                     width: scrw * 55,
                   ),
                   Image.asset(
@@ -129,50 +129,53 @@ class _RegisterPageState extends State<RegisterPage> {
           direction: smallVer ? Axis.vertical : Axis.horizontal,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                onPrimary: Colors.white,
-                primary: Colors.deepPurple,
-                onSurface: Colors.deepPurple,
-                side: const BorderSide(color: Colors.yellow, width: 1),
-                elevation: 20,
-                minimumSize:
-                    smallVer ? Size(scrw * 60, scrh * 7) : const Size(150, 50),
-                shape: BeveledRectangleBorder(
-                    side: const BorderSide(
-                        color: Color.fromARGB(255, 255, 255, 255), width: 2),
-                    borderRadius: BorderRadius.circular(15)),
-              ),
-              onPressed: () async {
-                if (dataIndex == -1) {
-                  showAlertDialog(
-                      context,
-                      scrw,
-                      smallVer,
-                      "Belum ada yang buka!",
-                      "Harap tunggu sampai pendaftaran dibuka!",
-                      false);
-                } else {
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context) => RegisterForm(
-                            batch: registrationData[dataIndex]['batch'],
-                            packageTitles: registrationData[dataIndex]
-                                ['packageTitles'],
-                            packages: registrationData[dataIndex]['packages'],
-                          ),
-                      barrierDismissible: false);
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
-                child: Text("REGISTER",
-                    style: TextStyle(
-                        fontSize: scrw * (smallVer ? 4 : 1.1),
-                        letterSpacing: 2.0,
-                        fontFamily: 'Unifont')),
-              ),
-            )
+            if (DateTime.now().isAfter(DateTime(2024, 2, 8, 0)))
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  onPrimary: Colors.white,
+                  primary: Theme.of(context).colorScheme.primary,
+                  onSurface: Colors.blue.shade800,
+                  side: const BorderSide(
+                      color: Color.fromARGB(255, 246, 133, 132), width: 1),
+                  elevation: 20,
+                  minimumSize: smallVer
+                      ? Size(scrw * 60, scrh * 7)
+                      : const Size(150, 50),
+                  shape: BeveledRectangleBorder(
+                      side: const BorderSide(
+                          color: Color.fromARGB(255, 255, 255, 255), width: 2),
+                      borderRadius: BorderRadius.circular(15)),
+                ),
+                onPressed: () async {
+                  if (dataIndex == -1) {
+                    showAlertDialog(
+                        context,
+                        scrw,
+                        smallVer,
+                        "Belum ada yang buka!",
+                        "Harap tunggu sampai pendaftaran dibuka!",
+                        false);
+                  } else {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context) => RegisterForm(
+                              batch: registrationData[dataIndex]['batch'],
+                              packageTitles: registrationData[dataIndex]
+                                  ['packageTitles'],
+                              packages: registrationData[dataIndex]['packages'],
+                            ),
+                        barrierDismissible: false);
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
+                  child: Text("REGISTER",
+                      style: TextStyle(
+                          fontSize: scrw * (smallVer ? 4 : 1.1),
+                          letterSpacing: 2.0,
+                          fontFamily: 'Unifont')),
+                ),
+              )
           ],
         ),
       ],
@@ -188,7 +191,7 @@ class TitlePainter extends CustomPainter {
     double cornerSide = sh * 0.1; // desirable value for corners side
 
     Paint paint = Paint()
-      ..color = Colors.purpleAccent.shade700
+      ..color = Colors.blueAccent.shade700
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.butt;

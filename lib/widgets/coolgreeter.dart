@@ -55,7 +55,8 @@ class _CoolGreeterState extends State<CoolGreeter> {
     } else {
       smallVer = false;
     }
-    if (!smallVer) Timer.periodic(const Duration(seconds: 1), (Timer t) => _setTime());
+    if (!smallVer)
+      Timer.periodic(const Duration(seconds: 1), (Timer t) => _setTime());
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
       child: SizedBox(
@@ -69,7 +70,7 @@ class _CoolGreeterState extends State<CoolGreeter> {
                 padding: const EdgeInsets.all(20.0),
                 child: DefaultTextStyle(
                   style: TextStyle(
-                      color: Colors.purpleAccent.shade400,
+                      color: Colors.blueAccent.shade400,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Unifont',
                       fontSize: scrw * 1.1),
@@ -90,11 +91,19 @@ class _CoolGreeterState extends State<CoolGreeter> {
                       ),
                       Row(
                         key: ValueKey<String>(xPosString),
-                        children: [Text(xPosString), const Spacer(), Text(yPosString)],
+                        children: [
+                          Text(xPosString),
+                          const Spacer(),
+                          Text(yPosString)
+                        ],
                       ),
                       Row(
                         key: ValueKey<String>(dateString),
-                        children: [Text(dateString), const Spacer(), Text(timeString)],
+                        children: [
+                          Text(dateString),
+                          const Spacer(),
+                          Text(timeString)
+                        ],
                       ),
                     ],
                   ),
@@ -109,65 +118,66 @@ class _CoolGreeterState extends State<CoolGreeter> {
                 padding: EdgeInsets.all(smallVer ? 10 : 20.0),
                 child: DefaultTextStyle(
                   style: TextStyle(
-                      color: Colors.purpleAccent.shade400,
+                      color: Colors.blueAccent.shade400,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Unifont',
                       fontSize: scrw * (smallVer ? 5 : 1.5)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onHover: (e) {
-                          setState(() {
-                            rulesPointerText = "> GuideBook";
-                          });
-                        },
-                        onExit: (e) {
-                          setState(() {
-                            rulesPointerText = "GuideBook";
-                          });
-                        },
-                        child: Builder(
-                          builder: (context) => GestureDetector(
-                            onTap: () => _launchUrl(Uri.parse('https://trojans.id/GuideBook')),
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Row(
-                                children: [
-                                  Text(rulesPointerText),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onHover: (e) {
-                          setState(() {
-                            faqPointerText = "> FAQ";
-                          });
-                        },
-                        onExit: (e) {
-                          setState(() {
-                            faqPointerText = "FAQ";
-                          });
-                        },
-                        child: Builder(
-                          builder: (context) => GestureDetector(
-                            onTap: () => Scaffold.of(context).openDrawer(),
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Row(
-                                children: [
-                                  Text(faqPointerText),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // MouseRegion(
+                      //   cursor: SystemMouseCursors.click,
+                      //   onHover: (e) {
+                      //     setState(() {
+                      //       rulesPointerText = "> GuideBook";
+                      //     });
+                      //   },
+                      //   onExit: (e) {
+                      //     setState(() {
+                      //       rulesPointerText = "GuideBook";
+                      //     });
+                      //   },
+                      //   child: Builder(
+                      //     builder: (context) => GestureDetector(
+                      //       onTap: () => _launchUrl(
+                      //           Uri.parse('https://trojans.id/GuideBook')),
+                      //       child: Container(
+                      //         color: Colors.transparent,
+                      //         child: Row(
+                      //           children: [
+                      //             Text(rulesPointerText),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // MouseRegion(
+                      //   cursor: SystemMouseCursors.click,
+                      //   onHover: (e) {
+                      //     setState(() {
+                      //       faqPointerText = "> FAQ";
+                      //     });
+                      //   },
+                      //   onExit: (e) {
+                      //     setState(() {
+                      //       faqPointerText = "FAQ";
+                      //     });
+                      //   },
+                      //   child: Builder(
+                      //     builder: (context) => GestureDetector(
+                      //       onTap: () => Scaffold.of(context).openDrawer(),
+                      //       child: Container(
+                      //         color: Colors.transparent,
+                      //         child: Row(
+                      //           children: [
+                      //             Text(faqPointerText),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       MouseRegion(
                         cursor: SystemMouseCursors.click,
                         onHover: (e) {
@@ -182,7 +192,8 @@ class _CoolGreeterState extends State<CoolGreeter> {
                         },
                         child: Builder(
                           builder: (context) => GestureDetector(
-                            onTap: () => _launchUrl(Uri.parse('https://korpstar-poltekssn.org')),
+                            onTap: () => _launchUrl(
+                                Uri.parse('https://korpstar-poltekssn.org')),
                             // onTap: () {
                             //   showAlertDialog(context, scrw, smallVer);
                             // },

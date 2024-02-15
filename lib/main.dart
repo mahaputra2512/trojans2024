@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'TROJANS - The Annual Tryout Event',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         primarySwatch: Colors.purple,
       ),
       home: const Home(),

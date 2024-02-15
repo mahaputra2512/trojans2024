@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hovering/hovering.dart';
-import 'package:intl/intl.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:trojans/pages/prize.dart';
 
@@ -82,12 +82,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: smallVer ? scrh * 10 : 10, bottom: scrh * 6),
+                        padding: EdgeInsets.only(
+                            top: smallVer ? scrh * 10 : 10, bottom: scrh * 6),
                         child: Text("Leaderboard",
                             style: TextStyle(
                                 fontFamily: "Unifont",
                                 fontSize: scrw * (smallVer ? 6 : 4.5),
-                                color: Colors.purpleAccent.shade700)),
+                                color: Colors.blueAccent.shade700)),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -105,7 +106,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text('${data[0]['field1']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[0]['field1']}',
+                                          style: TextStyle(fontSize: 16)),
                                       SizedBox(width: scrw * 3),
                                       Text(
                                         '${data[0]['name']}',
@@ -113,7 +115,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                         textAlign: TextAlign.center,
                                       ),
                                       Spacer(),
-                                      Text('${data[0]['total']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[0]['total']}',
+                                          style: TextStyle(fontSize: 16)),
                                     ],
                                   ),
                                 ),
@@ -122,7 +125,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text('${data[1]['field1']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[1]['field1']}',
+                                          style: TextStyle(fontSize: 16)),
                                       SizedBox(width: scrw * 3),
                                       Text(
                                         '${data[1]['name']}',
@@ -130,7 +134,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                         textAlign: TextAlign.center,
                                       ),
                                       Spacer(),
-                                      Text('${data[1]['total']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[1]['total']}',
+                                          style: TextStyle(fontSize: 16)),
                                     ],
                                   ),
                                 ),
@@ -139,7 +144,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text('${data[2]['field1']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[2]['field1']}',
+                                          style: TextStyle(fontSize: 16)),
                                       SizedBox(width: scrw * 3),
                                       Text(
                                         '${data[2]['name']}',
@@ -147,7 +153,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                         textAlign: TextAlign.center,
                                       ),
                                       Spacer(),
-                                      Text('${data[2]['total']}', style: TextStyle(fontSize: 16)),
+                                      Text('${data[2]['total']}',
+                                          style: TextStyle(fontSize: 16)),
                                     ],
                                   ),
                                 ),
@@ -158,8 +165,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                               children: [
                                 BoxPrizes(
                                     title: "#2",
-                                    image: Lottie.asset("lotties/coin_silver.json", width: scrw * 5),
-                                    description: [data[1]['name'], data[1]['total'].toString(), ''],
+                                    image: Lottie.asset(
+                                        "lotties/coin_silver.json",
+                                        width: scrw * 5),
+                                    description: [
+                                      data[1]['name'],
+                                      data[1]['total'].toString(),
+                                      ''
+                                    ],
                                     width: scrw * 15,
                                     height: scrh * 25),
                                 SizedBox(
@@ -167,8 +180,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                 ),
                                 BoxPrizes(
                                     title: "#1",
-                                    image: Lottie.asset("lotties/coin_gold.json", width: scrw * 6),
-                                    description: [data[0]['name'], data[0]['total'].toString(), ''],
+                                    image: Lottie.asset(
+                                        "lotties/coin_gold.json",
+                                        width: scrw * 6),
+                                    description: [
+                                      data[0]['name'],
+                                      data[0]['total'].toString(),
+                                      ''
+                                    ],
                                     width: scrw * 20,
                                     height: scrh * 30),
                                 SizedBox(
@@ -176,8 +195,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                 ),
                                 BoxPrizes(
                                     title: "#3",
-                                    image: Lottie.asset("lotties/coin_bronze.json", width: scrw * 3),
-                                    description: [data[2]['name'], data[2]['total'].toString(), ''],
+                                    image: Lottie.asset(
+                                        "lotties/coin_bronze.json",
+                                        width: scrw * 3),
+                                    description: [
+                                      data[2]['name'],
+                                      data[2]['total'].toString(),
+                                      ''
+                                    ],
                                     width: scrw * 10,
                                     height: scrh * 20),
                               ],
@@ -191,9 +216,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         showItemDuration: Duration(milliseconds: 300),
                         visibleFraction: 0.05,
                         reAnimateOnVisibility: false,
-                        itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+                        itemBuilder: (BuildContext context, int index,
+                            Animation<double> animation) {
                           return HoverAnimatedContainer(
-                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
                             padding: EdgeInsets.all(15),
                             duration: Duration(milliseconds: 150),
                             // hoverDecoration: BoxDecoration(
@@ -203,15 +230,20 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text('${data[index + 3]['field1']}', style: TextStyle(fontSize: smallVer ? 16 : 24)),
+                                Text('${data[index + 3]['field1']}',
+                                    style: TextStyle(
+                                        fontSize: smallVer ? 16 : 24)),
                                 SizedBox(width: scrw * 3),
                                 Text(
                                   '${data[index + 3]['name']}',
-                                  style: TextStyle(fontSize: smallVer ? 16 : 24),
+                                  style:
+                                      TextStyle(fontSize: smallVer ? 16 : 24),
                                   textAlign: TextAlign.center,
                                 ),
                                 Spacer(),
-                                Text('${data[index + 3]['total']}', style: TextStyle(fontSize: smallVer ? 16 : 24)),
+                                Text('${data[index + 3]['total']}',
+                                    style: TextStyle(
+                                        fontSize: smallVer ? 16 : 24)),
                               ],
                             ),
                           );
