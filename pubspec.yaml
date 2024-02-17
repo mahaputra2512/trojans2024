@@ -52,6 +52,7 @@ dependencies:
   adaptive_scrollbar: ^2.1.2
   vs_scrollbar: ^0.2.1
   metaballs: ^1.5.0
+  mysql1: ^0.20.0
 
 dev_dependencies:
   flutter_test:

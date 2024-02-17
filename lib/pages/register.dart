@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trojans/pages/loginform.dart';
 import 'package:trojans/pages/registerform.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -210,13 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       //login logic
                       await showDialog(
                           context: context,
-                          builder: (BuildContext context) => RegisterForm(
-                                batch: registrationData[dataIndex]['batch'],
-                                packageTitles: registrationData[dataIndex]
-                                    ['packageTitles'],
-                                packages: registrationData[dataIndex]
-                                    ['packages'],
-                              ),
+                          builder: (BuildContext context) => LoginPage(),
                           barrierDismissible: false);
                     },
                     child: Padding(
