@@ -125,57 +125,111 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: scrw * 65,
               ),
         SizedBox(height: scrh * (smallVer ? 1 : 3)),
-        Flex(
-          direction: smallVer ? Axis.vertical : Axis.horizontal,
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (DateTime.now().isAfter(DateTime(2024, 2, 8, 0)))
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  onPrimary: Colors.white,
-                  primary: Theme.of(context).colorScheme.primary,
-                  onSurface: Colors.blue.shade800,
-                  side: const BorderSide(
-                      color: Color.fromARGB(255, 246, 133, 132), width: 1),
-                  elevation: 20,
-                  minimumSize: smallVer
-                      ? Size(scrw * 60, scrh * 7)
-                      : const Size(150, 50),
-                  shape: BeveledRectangleBorder(
+            Flex(
+              direction: smallVer ? Axis.vertical : Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (DateTime.now().isAfter(DateTime(2024, 2, 8, 0)))
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Theme.of(context).colorScheme.primary,
+                      onSurface: Colors.blue.shade800,
                       side: const BorderSide(
-                          color: Color.fromARGB(255, 255, 255, 255), width: 2),
-                      borderRadius: BorderRadius.circular(15)),
-                ),
-                onPressed: () async {
-                  if (dataIndex == -1) {
-                    showAlertDialog(
-                        context,
-                        scrw,
-                        smallVer,
-                        "Belum ada yang buka!",
-                        "Harap tunggu sampai pendaftaran dibuka!",
-                        false);
-                  } else {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) => RegisterForm(
-                              batch: registrationData[dataIndex]['batch'],
-                              packageTitles: registrationData[dataIndex]
-                                  ['packageTitles'],
-                              packages: registrationData[dataIndex]['packages'],
-                            ),
-                        barrierDismissible: false);
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
-                  child: Text("REGISTER",
-                      style: TextStyle(
-                          fontSize: scrw * (smallVer ? 4 : 1.1),
-                          letterSpacing: 2.0,
-                          fontFamily: 'Unifont')),
-                ),
-              )
+                          color: Color.fromARGB(255, 246, 133, 132), width: 1),
+                      elevation: 20,
+                      minimumSize: smallVer
+                          ? Size(scrw * 60, scrh * 7)
+                          : const Size(150, 50),
+                      shape: BeveledRectangleBorder(
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              width: 2),
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                    onPressed: () async {
+                      if (dataIndex == -1) {
+                        showAlertDialog(
+                            context,
+                            scrw,
+                            smallVer,
+                            "Belum ada yang buka!",
+                            "Harap tunggu sampai pendaftaran dibuka!",
+                            false);
+                      } else {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) => RegisterForm(
+                                  batch: registrationData[dataIndex]['batch'],
+                                  packageTitles: registrationData[dataIndex]
+                                      ['packageTitles'],
+                                  packages: registrationData[dataIndex]
+                                      ['packages'],
+                                ),
+                            barrierDismissible: false);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
+                      child: Text("REGISTER",
+                          style: TextStyle(
+                              fontSize: scrw * (smallVer ? 4 : 1.1),
+                              letterSpacing: 2.0,
+                              fontFamily: 'Unifont')),
+                    ),
+                  )
+              ],
+            ),
+            SizedBox(width: 50),
+            Flex(
+              direction: smallVer ? Axis.vertical : Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (DateTime.now().isAfter(DateTime(2024, 2, 8, 0)))
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Theme.of(context).colorScheme.primary,
+                      onSurface: Colors.blue.shade800,
+                      side: const BorderSide(
+                          color: Color.fromARGB(255, 246, 133, 132), width: 1),
+                      elevation: 20,
+                      minimumSize: smallVer
+                          ? Size(scrw * 60, scrh * 7)
+                          : const Size(150, 50),
+                      shape: BeveledRectangleBorder(
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              width: 2),
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                    onPressed: () async {
+                      //login logic
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) => RegisterForm(
+                                batch: registrationData[dataIndex]['batch'],
+                                packageTitles: registrationData[dataIndex]
+                                    ['packageTitles'],
+                                packages: registrationData[dataIndex]
+                                    ['packages'],
+                              ),
+                          barrierDismissible: false);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(smallVer ? scrw * 0.5 : 16.0),
+                      child: Text("LOGIN",
+                          style: TextStyle(
+                              fontSize: scrw * (smallVer ? 4 : 1.1),
+                              letterSpacing: 2.0,
+                              fontFamily: 'Unifont')),
+                    ),
+                  )
+              ],
+            ),
           ],
         ),
       ],
