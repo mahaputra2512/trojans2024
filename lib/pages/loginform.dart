@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       var results = await conn.query(
         "SELECT * FROM users WHERE email = '?' AND password = '?'",
-        [_emailController.text, _passwordController.text],
+        [_usernameController.text, _passwordController.text],
       );
 
       if (results.isNotEmpty) {
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
   //       child: Column(
   //         children: [
   //           TextField(
-  //             controller: _emailController,
+  //             controller: _usernameController,
   //             decoration: InputDecoration(
   //               labelText: 'Username',
   //             ),
@@ -182,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
-                                    controller: _emailController,
+                                    controller: _usernameController,
                                     style: const TextStyle(
                                         fontFamily: 'Unifont',
                                         color: Colors.white),
                                     decoration: const InputDecoration(
-                                      labelText: "Email",
+                                      labelText: "Username",
                                       labelStyle: TextStyle(
                                           fontFamily: 'Unifont',
                                           color: Colors.white),
@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return 'Email tidak boleh kosong';
+                                        return 'Username tidak boleh kosong';
                                       }
                                       return null;
                                     },
@@ -279,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                                     padding: EdgeInsets.all(
                                         smallVer ? scrw * 0.5 : 16.0),
                                     child: Text(
-                                      "SUBMIT",
+                                      "LOGIN",
                                       style: TextStyle(
                                           fontSize: scrw * (smallVer ? 4 : 1.1),
                                           letterSpacing: 2.0,
